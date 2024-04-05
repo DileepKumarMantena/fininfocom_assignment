@@ -10,21 +10,20 @@ from rest_framework.parsers import MultiPartParser
 class DeleteEmployeeApi(generics.GenericAPIView):
     serializer_class = EmployeePostSerializer
 
-    def delete(self, request, id, format=None):
+    def delete(self, request, id):
         try:
-            employee = EmplloyeeModel.objects.get(id=id)
-            employee.delete()
+            d = EmplloyeeModel.objects.get(id=id)
+            d.delete()
             return Response({
-                'message': 'Employee deleted successfully',
-                'success': True
-            }, status=200)
+                'message': 'Successful',
+                'Result': True,
+                'HasError': False,
+                'status': 200
+            })
         except EmplloyeeModel.DoesNotExist as e:
             return Response({
-                'message': 'No employee found with this regid',
-                'success': False
-            }, status=200)
-        except Exception as e:
-            return Response({
-                'message': 'Employee deletion failed',
-                'success': False
-            }, status=500)
+                'message': 'Book Not Found',
+                'Result': False,
+                'HasError': True,
+                'status': 400
+            })

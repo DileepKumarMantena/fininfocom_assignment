@@ -4,10 +4,6 @@ from rest_framework.response import Response
 from ..serializers import EmployeePostSerializer
 from rest_framework.parsers import MultiPartParser
 
-from rest_framework.response import Response
-from rest_framework import generics
-from rest_framework.parsers import MultiPartParser
-
 @parser_classes((MultiPartParser,))
 class EmployeePostApi(generics.GenericAPIView):
     serializer_class = EmployeePostSerializer
@@ -15,28 +11,21 @@ class EmployeePostApi(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         try:
             serializer = self.get_serializer(data=request.data)
+            print('hai')
             serializer.is_valid(raise_exception=True)
+            print('hai2')
             user = serializer.save()
+            print("hai3")
             return Response({
-                'message': 'Employee created successfully',
-                'regid': user.regid,
-                'success': True
-            }, status=200)
-        except serializer.ValidationError as e:
-            # Duplicate email error
-            if 'email' in e.detail and 'unique' in e.detail['email'][0]:
-                return Response({
-                    'message': 'Employee already exists',
-                    'success': False
-                }, status=200)
-            else:
-                return Response({
-                    'message': 'Invalid body request',
-                    'success': False
-                }, status=400)
+                'message': 'Successful',
+                'Result': EmployeePostSerializer(user).data,
+                'HasError': False,
+                'status': 200
+            })
         except Exception as e:
-            # Exception occurred
             return Response({
-                'message': 'Employee creation failed',
-                'success': False
-            }, status=500)
+                'message': 'Fail',
+                'Result': [],
+                'HasError': True,
+                'status': 400
+            })

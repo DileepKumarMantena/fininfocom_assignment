@@ -24,3 +24,5 @@ class EmployeeGetApi(generics.GenericAPIView):
                              'Result': [],
                              'HasError': True,
                              'Status': 400})
+        
+
